@@ -3,7 +3,7 @@ CXX = g++
 CXXFLAGS = -std=c++23 -Wall -Wextra -O2
 
 # Target executable
-TARGET = cpu_monitor
+TARGET = bin/cpu_monitor
 
 # Source files
 SOURCES = main.cpp cputil.cpp
