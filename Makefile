@@ -3,11 +3,13 @@ CXX = g++
 CXXFLAGS = -std=c++23 -Wall -Wextra -O2
 
 # Target executable
-TARGET = bin/cpu_monitor
+TARGET_DIR = bin
+TARGET = $(TARGET_DIR)/cpu_monitor
 
 # Source files
 SOURCES = main.cpp cputil.cpp
-OBJECTS = $(SOURCES:.cpp=.o)
+# This transforms 'main.cpp' into 'bin/main.o'
+OBJECTS = $(addprefix $(TARGET_DIR)/, $(SOURCES:.cpp=.o))
 
 # Default target
 all: $(TARGET)
@@ -16,8 +18,10 @@ all: $(TARGET)
 $(TARGET): $(OBJECTS)
 	$(CXX) $(OBJECTS) -o $(TARGET)
 
-# Compile .cpp to .o
-%.o: %.cpp
+# Compile .cpp to .o and place them in bin/
+# The 'mkdir' ensures the directory exists before compiling
+$(TARGET_DIR)/%.o: %.cpp
+	@mkdir -p $(TARGET_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Run the program
@@ -26,7 +30,7 @@ run: $(TARGET)
 
 # Clean build files
 clean:
-	rm -f $(OBJECTS) $(TARGET)
+	rm -rf $(TARGET_DIR)
 
-# Phony targets (not actual files)
+# Phony targets
 .PHONY: all clean run
